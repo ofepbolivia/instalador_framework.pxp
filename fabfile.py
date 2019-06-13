@@ -20,7 +20,7 @@ def instalar_pxp():
 	
 	if(version == 'release 7'):
 		# postgres de  rpm de postgres 9.5# 
-		run("wget http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm")
+		run("wget https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm")
 	else:
 		# postgres de  rpm de postgres 9.5# 
 		run("wget http://yum.postgresql.org/9.5/redhat/rhel-6-x86_64/pgdg-redhat95-9.5-3.noarch.rpm")
@@ -31,19 +31,19 @@ def instalar_pxp():
 	s.close()
 
 	if(version == 'release 7'):
-		run("rpm -Uvh --replacepkgs pgdg-centos95-9.5-3.noarch.rpm")
+		run("rpm -Uvh --replacepkgs pgdg-redhat-repo-latest.noarch.rpm")
 	else:
 		run("rpm -Uvh --replacepkgs pgdg-redhat95-9.5-3.noarch.rpm")
 	
 # instalacion de postgres y la primera corrida #
 	S_pgsql="service postgresql-9.5"
 	I_pgsql="postgresql95"
-	sudo("yum -y install postgresql95-server postgresql95-docs postgresql95-contrib postgresql95-plperl postgresql95-plpython postgresql95-pltcl postgresql95-test rhdb-utils gcc-objc postgresql95-devel ")
+	sudo("yum -y install postgresql11-server postgresql11-docs postgresql11-contrib postgresql11-plperl postgresql11-plpython postgresql11-pltcl postgresql11-test rhdb-utils gcc-objc postgresql11-devel ")
 	if(version == 'release 7'):
 		
-		run("/usr/pgsql-9.5/bin/postgresql95-setup initdb")
-		run("systemctl start postgresql-9.5")
-		run("systemctl enable postgresql-9.5")
+		run("/usr/pgsql-11/bin/postgresql-11-setup initdb")
+		run("systemctl start postgresql-11")
+		run("systemctl enable postgresql-11")
 	else:
 		
 		run("service postgresql-9.5 initdb")
@@ -51,9 +51,12 @@ def instalar_pxp():
 		run("chkconfig postgresql-9.5 on")
 
 # instalacion del php y apache mas la primera corrida #
+	sudo("yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm")
+	sudo("yum install -y https://rpms.remirepo.net/enterprise/remi-release-7.rpm")
+	sudo("yum install -y yum-utils")
+	sudo("yum-config-manager --enable remi-php73")
 
-
-	sudo("yum -y install httpd php  mod_ssl mod_auth_pgsql  php-pear php-bcmath  php-mbstring php-cli php-ldap php-pdo php-pgsql php-gd")
+	sudo("yum -y install httpd php73-php mod_ssl mod_auth_pgsql php73-php-pear php73-php-bcmath php73-php-cli php73-php-ldap php73-php-pdo php73-php-pgsql php73-php-gd  php73-php-mbstring php73-php-pecl-zip")
 	
 	if(version == 'release 7'):
 		run("systemctl start httpd")
@@ -85,8 +88,8 @@ def instalar_pxp():
 	archi.write('}')
 	archi.close()
 	
-	run("gcc -I /usr/local/include -I /usr/pgsql-9.5/include/server/ -fpic -c /usr/local/lib/phx.c")
-	run("gcc -I /usr/local/include -I /usr/pgsql-9.5/include/server/ -shared -o /usr/local/lib/phx.so phx.o")
+	run("gcc -I /usr/local/include -I /usr/pgsql-11/include/server/ -fpic -c /usr/local/lib/phx.c")
+	run("gcc -I /usr/local/include -I /usr/pgsql-11/include/server/ -shared -o /usr/local/lib/phx.so phx.o")
 	
 
 	run("chown root.postgres /usr/local/lib/phx.so")
@@ -126,11 +129,11 @@ def instalar_pxp():
 	
 	
 	run("yum -y update")
-	run("yum -y install php-mcrypt*")
+	run("yum -y install php73-php-mcrypt*")
 
 # cambio de los archivos pg_hba y postgres.config#
 	
-	archi=open("/var/lib/pgsql/9.5/data/pg_hba.conf",'w')
+	archi=open("/var/lib/pgsql/11/data/pg_hba.conf",'w')
 		
 	archi.write("# TYPE  DATABASE        USER            ADDRESS                 METHOD\n\n")
 	archi.write("# 'local' is for Unix domain socket connections only\n")
@@ -144,7 +147,7 @@ def instalar_pxp():
 	archi.close()
 
 	
-	f = open("/var/lib/pgsql/9.5/data/postgresql.conf",'r')
+	f = open("/var/lib/pgsql11/data/postgresql.conf",'r')
 	
 	chain = f.read()
 	chain = chain.replace("pg_catalog.english","pg_catalog.spanish")
@@ -157,13 +160,13 @@ def instalar_pxp():
 	f.close()
 	
 	
-	otro = open("/var/lib/pgsql/9.5/data/postgresql.conf",'w')
+	otro = open("/var/lib/pgsql/11/data/postgresql.conf",'w')
 	
 		
 	otro.write(chain)
 	otro.close()
 	
-	s = open("/var/lib/pgsql/9.5/data/postgresql.conf",'a')
+	s = open("/var/lib/pgsql/11/data/postgresql.conf",'a')
 	
 	s.write("listen_addresses = '*'\n")
 	s.write("bytea_output = 'escape'\n")
@@ -179,7 +182,7 @@ def instalar_pxp():
 	sudo('psql -c "ALTER ROLE dbkerp_admin SUPERUSER;"', user='postgres')
 	
 	if(version == 'release 7'):
-		run('systemctl restart postgresql-9.5')
+		run('systemctl restart postgresql-11')
 	else:
 		run('service postgresql-9.5 restart')
 
@@ -193,7 +196,7 @@ def instalar_pxp():
 		run("git config --global http.proxy http://" + proxy)
 		run("git config --global https.proxy https://" + proxy)
 		
-	run("git clone https://github.com/kplian/pxp.git /var/www/html/kerp/pxp")
+	run("git clone https://github.com/ofep/pxp.git /var/www/html/kerp/pxp")
 	run("chown -R apache.apache /var/www/html/kerp/")
 	run("chmod 700 -R /var/www/html/kerp/")
 
@@ -214,7 +217,7 @@ def instalar_pxp():
 	chain = chain.replace("/kerp-boa/","/kerp/")
 	
 	
-	chain = chain.replace("/var/lib/pgsql/9.1/data/pg_log/","/var/lib/pgsql/9.5/data/pg_log/")
+	chain = chain.replace("/var/lib/pgsql/9.1/data/pg_log/","/var/lib/pgsql/11/data/pg_log/")
 	
 
 	f.close()
