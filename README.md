@@ -63,7 +63,7 @@ Anadir (solo si la conexion es por proxy) :
 * Clonamos este repositorio  (en la raiz /)
 
 ```sh
-git clone https://github.com/kplian/instalador_framework.pxp.git
+git clone https://github.com/ofep/instalador_framework.pxp.git
 ```
 
 * Luego ejecutamos en la carpeta donde se encuentra el instalador (dentro de la carpeta que se acaba de clonar)
