@@ -54,9 +54,9 @@ def instalar_pxp():
 	sudo("yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm")
 	sudo("yum install -y https://rpms.remirepo.net/enterprise/remi-release-7.rpm")
 	sudo("yum install -y yum-utils")
-	sudo("yum-config-manager --enable remi-php73")
+	sudo("yum-config-manager --enable remi-php72")
 
-	sudo("yum -y install httpd php73-php mod_ssl mod_auth_pgsql php73-php-pear php73-php-bcmath php73-php-cli php73-php-ldap php73-php-pdo php73-php-pgsql php73-php-gd  php73-php-mbstring php73-php-pecl-zip")
+	sudo("yum -y install httpd php72-php mod_ssl mod_auth_pgsql php72-php-pear php72-php-bcmath php72-php-cli php72-php-ldap php72-php-pdo php72-php-pgsql php72-php-gd  php72-php-mbstring php72-php-pecl-zip")
 	
 	if(version == 'release 7'):
 		run("systemctl start httpd")
@@ -129,7 +129,7 @@ def instalar_pxp():
 	
 	
 	run("yum -y update")
-	run("yum -y install php73-php-mcrypt*")
+	run("yum -y install php72-php-mcrypt*")
 
 # cambio de los archivos pg_hba y postgres.config#
 	
@@ -196,7 +196,7 @@ def instalar_pxp():
 		run("git config --global http.proxy http://" + proxy)
 		run("git config --global https.proxy https://" + proxy)
 		
-	run("git clone https://github.com/ofep/pxp.git /var/www/html/kerp/pxp")
+	run("git clone https://github.com/ofepbolivia/pxp.git /var/www/html/kerp/pxp")
 	run("chown -R apache.apache /var/www/html/kerp/")
 	run("chmod 700 -R /var/www/html/kerp/")
 
