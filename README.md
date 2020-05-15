@@ -39,8 +39,10 @@ export https_proxy=https://1.1.1.1:8080
 ```
 # install EPEL repository first
 $ sudo yum install epel-release
+
 # install python-pip
 $ sudo yum -y install python-pip
+$ pip install --upgrade pip
 ```
 <!---
 pip install fabric paramiko==1.10  ptyprocess==0.4  fexpect PyCrypto==2.3   --NO USAR OBSOLETO
