@@ -42,12 +42,12 @@ def instalar_pxp():
         # instalacion de postgres y la primera corrida #
                 S_pgsql="service postgresql-9.5"
                 I_pgsql="postgresql95"
-                sudo("yum -y install postgresql11-server postgresql11-docs postgresql11-contrib postgresql11-plperl postgresql11-plpython postgresql11-pltcl postgresql11-test rhdb-utils gcc-objc postgresql11-devel --skip-broken")
+                sudo("yum -y install postgresql12-server postgresql12-docs postgresql12-contrib postgresql12-plperl postgresql12-plpython postgresql12-pltcl postgresql12-test rhdb-utils gcc-objc postgresql12-devel --skip-broken")
                 if(version == 'release 7'):
                         
-                        run("/usr/pgsql-11/bin/postgresql-11-setup initdb")
-                        run("systemctl start postgresql-11")
-                        run("systemctl enable postgresql-11")
+                        run("/usr/pgsql-12/bin/postgresql-12-setup initdb")
+                        run("systemctl start postgresql-12")
+                        run("systemctl enable postgresql-12")
                 else:
                         
                         run("service postgresql-9.5 initdb")
@@ -92,8 +92,8 @@ def instalar_pxp():
                 archi.write('}')
                 archi.close()
                 
-                run("gcc -I /usr/local/include -I /usr/pgsql-11/include/server/ -fpic -c /usr/local/lib/phx.c")
-                run("gcc -I /usr/local/include -I /usr/pgsql-11/include/server/ -shared -o /usr/local/lib/phx.so phx.o")
+                run("gcc -I /usr/local/include -I /usr/pgsql-12/include/server/ -fpic -c /usr/local/lib/phx.c")
+                run("gcc -I /usr/local/include -I /usr/pgsql-12/include/server/ -shared -o /usr/local/lib/phx.so phx.o")
                 
 
                 run("chown root.postgres /usr/local/lib/phx.so")
@@ -137,7 +137,7 @@ def instalar_pxp():
 
         # cambio de los archivos pg_hba y postgres.config#
                 
-                archi=open("/var/lib/pgsql/11/data/pg_hba.conf",'w')
+                archi=open("/var/lib/pgsql/12/data/pg_hba.conf",'w')
                         
                 archi.write("# TYPE  DATABASE        USER            ADDRESS                 METHOD\n\n")
                 archi.write("# 'local' is for Unix domain socket connections only\n")
@@ -151,7 +151,7 @@ def instalar_pxp():
                 archi.close()
 
                 
-                f = open("/var/lib/pgsql/11/data/postgresql.conf",'r')
+                f = open("/var/lib/pgsql/12/data/postgresql.conf",'r')
                 
                 chain = f.read()
                 chain = chain.replace("pg_catalog.english","pg_catalog.spanish")
@@ -164,13 +164,13 @@ def instalar_pxp():
                 f.close()
                 
                 
-                otro = open("/var/lib/pgsql/11/data/postgresql.conf",'w')
+                otro = open("/var/lib/pgsql/12/data/postgresql.conf",'w')
                 
                         
                 otro.write(chain)
                 otro.close()
                 
-                s = open("/var/lib/pgsql/11/data/postgresql.conf",'a')
+                s = open("/var/lib/pgsql/12/data/postgresql.conf",'a')
                 
                 s.write("listen_addresses = '*'\n")
                 s.write("bytea_output = 'escape'\n")
@@ -186,7 +186,7 @@ def instalar_pxp():
                 sudo('psql -c "ALTER ROLE dbkerp_admin SUPERUSER;"', user='postgres')
                 
                 if(version == 'release 7'):
-                        run('systemctl restart postgresql-11')
+                        run('systemctl restart postgresql-12')
                 else:
                         run('service postgresql-9.5 restart')
 
@@ -221,7 +221,7 @@ def instalar_pxp():
                 chain = chain.replace("/kerp-boa/","/kerp/")
                 
                 
-                chain = chain.replace("/var/lib/pgsql/9.1/data/pg_log/","/var/lib/pgsql/11/data/pg_log/")
+                chain = chain.replace("/var/lib/pgsql/9.1/data/pg_log/","/var/lib/pgsql/12/data/pg_log/")
                 
 
                 f.close()
