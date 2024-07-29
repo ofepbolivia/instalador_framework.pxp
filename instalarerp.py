@@ -5,7 +5,7 @@ os.system('wget https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_
 os.system('rpm -Uvh --replacepkgs pgdg-redhat-repo-latest.noarch.rpm')
 os.system('yum -y install postgresql12-server postgresql12-docs postgresql12-contrib postgresql12-plperl postgresql12-plpython postgresql12-pltcl postgresql12-test rhdb-utils gcc-objc postgresql12-devel --skip-broken')
 os.system('/usr/pgsql-12/bin/postgresql-12-setup initdb')
-os.system('updsystemctl start postgresql-12ate')
+os.system('systemctl start postgresql-12')
 os.system('systemctl enable postgresql-12')
 os.system('yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm')
 os.system('yum install -y https://rpms.remirepo.net/enterprise/remi-release-9.rpm')
